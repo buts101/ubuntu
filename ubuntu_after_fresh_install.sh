@@ -4,6 +4,14 @@
 # We haf troubles with fpt and other repo from Vietnam for a while then we change to use the main server
 # to download packages from. The speed is limitted but more updated.
 
+# Require to run this script as root
+if [ "$(id -u)" != "0" ]; then
+    echo "
+    Please run this script with sudo permission.
+    Try: sudo ./ubuntu_after_fresh_install.sh"
+    exit 1
+fi
+
 # #########################################
 # # Copy downloaded files from local server
 # #########################################
@@ -22,7 +30,7 @@
 # Add nessessary repo
 #####################
 
-# We can install skype, fashplugins, etc from this repo
+# We can install skype, adobe-flashplugin, etc from this repo
 apt-add-repository "deb http://archive.canonical.com/ $(lsb_release -sc) partner" -y
 
 # To upgrade libreoffice newest version
@@ -30,8 +38,10 @@ add-apt-repository ppa:libreoffice/ppa -y
 
 # Google-chrome
 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
 
+# Indicator multiload
+add-apt-repository ppa:indicator-multiload/stable-daily -y
 
 ###################################
 # Switch to update from main server
@@ -57,7 +67,7 @@ DEV_TOOLS="vim git"
 TERMINAL="terminator guake"
 MEDIA="vlc"
 OFFICE="ibus-unikey ttf-mscorefonts-installer" 
-OTHER="unrar-free unrar openssh-server"
+OTHER="unrar-free unrar openssh-server indicator-multiload"
 
 # Agree with Microsoft lisence when using msttcorefonts
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections
